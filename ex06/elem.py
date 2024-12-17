@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 class Text(str):
     def __str__(self):
-        return super().__str__().replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace('\n', '\n<br />\n')
+        escaped = super().__str__().replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace('\n', '\n<br />\n')
+        return f'"{escaped}"'
+
 
 class Elem:
     class ValidationError(Exception):
@@ -55,19 +57,3 @@ class Elem:
                 (type(content) == list and all([type(elem) == Text or
                                                 isinstance(elem, Elem)
                                                 for elem in content])))
-
-def elem():
-    text = Text('"Kikou les zouzous"')
-    elem = Elem(tag='html', attr={}, content=[
-        Elem(tag='head', attr={}, content=[
-            Elem(tag='title', attr={}, content=[text])
-        ]),
-        Elem(tag='body', attr={}, content=[
-            Elem(tag='h1', attr={}, content=[text]),
-            Elem(tag='img', attr={'src': 'kikou.jpg', 'alt': text}, tag_type='simple')
-        ])
-    ])
-    print(elem)
-
-if __name__ == '__main__':
-    elem()
